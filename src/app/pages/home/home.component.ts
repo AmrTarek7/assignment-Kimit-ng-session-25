@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { AddUserComponent } from '../../components/add-user/add-user.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { UsersService } from '../../core/services/users.service';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -11,40 +14,48 @@ export interface PeriodicElement {
   symbol: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
+interface IUser {
+  id: string;
+  name: string;
+  email: string;
+}
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatTableModule],
+  imports: [
+    CommonModule,
+
+    MatDialogModule,
+    MatButtonModule,
+    MatTableModule,
+    MatDividerModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  UsersList!: IUser[];
 
-  constructor(private dialog: MatDialog) {}
+  readonly dialog = inject(MatDialog);
 
-  openFormDialog() {
-    const dialogRef = this.dialog.open(AddUserComponent, {
-      width: '400px',
-      data: {},
+  openFormDialog(): void {
+    this.dialog.open(AddUserComponent, {
+      width: '600px',
     });
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('البيانات اللي جت من الفورم:', result);
-      }
+  private _userService = inject(UsersService);
+  getAllUsers(): void {
+    this._userService.getUsers().subscribe({
+      next: (res) => {
+        this.UsersList = res;
+        console.log('Users List:', this.UsersList);
+      },
+      error: (err) => console.error('Error fetching users:', err),
     });
+  }
+
+  ngOnInit(): void {
+    this.getAllUsers();
   }
 }

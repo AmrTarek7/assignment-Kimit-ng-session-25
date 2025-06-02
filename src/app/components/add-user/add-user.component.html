@@ -1,27 +1,56 @@
-<h2 mat-dialog-title>أدخل بيانات المستخدم</h2>
+<button mat-icon-button class="m-3">
+  <mat-icon fontIcon="close" (click)="close()"></mat-icon>
+</button>
+<h2 mat-dialog-title>Enter User Data</h2>
 
-<form [formGroup]="form" (ngSubmit)="save()">
+<form [formGroup]="userForm" (ngSubmit)="onAddUser()">
   <mat-dialog-content>
-    <mat-form-field appearance="fill" class="w-full mb-4">
-      <mat-label>الاسم</mat-label>
-      <input matInput formControlName="name" />
+    <mat-form-field appearance="fill" class="mb-4 w-100 d-block">
+      <mat-label>Name</mat-label>
+      <input type="text" matInput formControlName="name" />
+
+      @if (userForm.controls["name"].hasError("required") ) {
+      <mat-error>Name is <strong>required</strong></mat-error>
+      }@if (userForm.controls["name"].hasError("minlength") ) {
+      <mat-error>Name must be 3 characters or more.</mat-error>
+      }@if (userForm.controls["name"].hasError("maxlength") ) {
+      <mat-error
+        >You have reached your maximum limit of 20 characters allowed</mat-error
+      >
+      }
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>البريد الإلكتروني</mat-label>
-      <input matInput formControlName="email" />
+    <mat-form-field appearance="fill" class="h-100 w-100 d-block">
+      <mat-label>Email</mat-label>
+      <input
+        type="email"
+        matInput
+        formControlName="email"
+        placeholder="Ex. pat@example.com"
+      />
+      @if (userForm.controls["email"].hasError('email') &&
+      !userForm.controls["email"].hasError('required')) {
+      <mat-error>Please enter a valid email address </mat-error>
+      } @if (userForm.controls["email"].hasError("required") ) {
+      <mat-error>Email is <strong>required</strong></mat-error>
+      }@if (userForm.controls["email"].hasError("minlength") &&
+      !userForm.controls["email"].hasError('email') ) {
+      <mat-error>Email must be 10 charchter or more.</mat-error>
+      }
     </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="close()">إلغاء</button>
+    <button mat-button type="button" color="danger" (click)="close()">
+      cancel
+    </button>
     <button
       mat-flat-button
       color="primary"
       type="submit"
-      [disabled]="form.invalid"
+      [disabled]="userForm.invalid"
     >
-      حفظ
+      Add User
     </button>
   </mat-dialog-actions>
 </form>
