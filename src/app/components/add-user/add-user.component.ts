@@ -12,14 +12,6 @@ import {
 } from '@angular/forms';
 import { UsersService } from '../../core/services/users.service';
 
-// import {
-//   MAT_DIALOG_DATA,
-//   MatDialogRef,
-//   MatDialogModule,
-// } from '@angular/material/dialog';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatInputModule } from '@angular/material/input';
-// import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-add-user',
   imports: [
@@ -57,14 +49,10 @@ export class AddUserComponent {
           console.log('User added successfully:', response);
           this.close();
         },
-        error: (error) => console.error('Error adding user:', error),
+        error: (error) => console.error('Error adding user:'),
       });
     }
   }
-
-  // getAllUsers():void{
-  //   this._userService.getUsers
-  // }
 
   close() {
     this.dialogRef.close();

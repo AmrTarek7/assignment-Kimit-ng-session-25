@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { UsersService } from '../../core/services/users.service';
+
+import { AddUserBootstrapComponent } from '../../add-user-bootstrap/add-user-bootstrap.component';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -23,7 +25,7 @@ interface IUser {
   selector: 'app-home',
   imports: [
     CommonModule,
-
+    AddUserBootstrapComponent,
     MatDialogModule,
     MatButtonModule,
     MatTableModule,
@@ -33,10 +35,9 @@ interface IUser {
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   UsersList!: IUser[];
 
-  readonly dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
 
   openFormDialog(): void {
     this.dialog.open(AddUserComponent, {

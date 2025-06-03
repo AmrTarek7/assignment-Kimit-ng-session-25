@@ -1,0 +1,85 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit(modal)">
+      <div class="mb-3">
+        <label for="name">Name</label>
+        <div class="mt-2 input-group">
+          <input
+            id="name"
+            class="form-control d-block"
+            type="text"
+            placeholder="enter user name"
+            formControlName="name"
+          />
+        </div>
+        @if (userForm.controls["name"].touched &&
+        userForm.controls["name"].dirty) { @if
+        (userForm.controls["name"].hasError("required") ) {
+        <p class="text-danger fs-6">Name is <strong>required</strong></p>
+        }@if (userForm.controls["name"].hasError("minlength") ) {
+        <p class="text-danger fs-6">Name must be 3 characters or more.</p>
+        }@if (userForm.controls["name"].hasError("maxlength") ) {
+        <p class="text-danger fs-6">
+          You have reached your maximum limit of 20 characters allowed
+        </p>
+        } }
+      </div>
+      <div class="mb-3">
+        <label for="email">Email</label>
+        <div class="mt-2 input-group">
+          <input
+            id="email"
+            class="form-control d-block"
+            placeholder="Ex. pat@example.com"
+            type="email"
+            formControlName="email"
+          />
+        </div>
+        @if (userForm.controls["email"].touched &&
+        userForm.controls["email"].dirty) { @if
+        (userForm.controls["email"].hasError("required") ) {
+        <p class="text-danger fs-6">Email is required</p>
+        } @if (userForm.controls["email"].hasError("email") ) {
+        <p class="text-danger fs-6">Please enter a valid email address</p>
+        } @if (userForm.controls["email"].hasError("minlength") &&
+        !userForm.controls["email"].hasError("email") ) {
+        <p class="text-danger fs-6">Email must be 10 characters or more.</p>
+        } }
+      </div>
+      <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-outline-success"
+          [disabled]="userForm.invalid"
+        >
+          Save
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="modal.dismiss('Cross click')"
+        >
+          close
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<button
+  class="mt-3 text-center w-100 btn btn-lg btn-outline-success d-block fs-4"
+  (click)="open(content)"
+>
+  <i class="bi bi-person-plus"></i>
+  Add New User
+</button>
