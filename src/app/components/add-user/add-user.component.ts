@@ -1,4 +1,4 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { UsersService } from '../../core/services/users.service';
+import { SharedService } from '../../core/services/shared.service';
 
 @Component({
   selector: 'app-add-user',
@@ -25,7 +26,7 @@ import { UsersService } from '../../core/services/users.service';
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.css',
 })
-export class AddUserComponent {
+export class AddUserComponent implements OnInit {
   userForm: FormGroup = new FormGroup({
     name: new FormControl('', [
       Validators.required,
@@ -41,12 +42,14 @@ export class AddUserComponent {
 
   private dialogRef = inject(MatDialogRef<AddUserComponent>);
   private _userService = inject(UsersService);
+  private _sharedService = inject(SharedService);
 
   onAddUser() {
     if (this.userForm.valid) {
       this._userService.addUser(this.userForm.value).subscribe({
         next: (response) => {
           console.log('User added successfully:', response);
+          this.onSomeAction();
           this.close();
         },
         error: (error) => console.error('Error adding user:'),
@@ -57,4 +60,11 @@ export class AddUserComponent {
   close() {
     this.dialogRef.close();
   }
+
+  onSomeAction() {
+    // عند حدوث الشيء المطلوب، أخبر component A
+    this._sharedService.triggerUserRefresh();
+  }
+
+  ngOnInit(): void {}
 }
