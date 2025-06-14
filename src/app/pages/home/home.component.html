@@ -2,17 +2,29 @@
   <button
     mat-fab
     extended
-    class="bg-success text-white text-center w-100 fs-4"
+    class="bg-success text-white text-center mb-4 w-100 fs-4"
     (click)="openFormDialog()"
   >
     <i class="bi bi-person-plus"></i>
     Add New User
   </button>
-  <!-- <app-add-user-bootstrap></app-add-user-bootstrap> -->
 
+  <button
+    class="text-center w-100 btn fs-4"
+    [ngClass]="{
+      'disabled btn-secondary ': disableBtnDeleteAll,
+      'btn-danger': !disableBtnDeleteAll
+    }"
+    (click)="onDeleteAllProducts()"
+  >
+    <i class="bi bi-trash"></i>
+    Delete All Product
+  </button>
+  <!-- <app-add-user-bootstrap></app-add-user-bootstrap> -->
   <table class="mt-3 table">
     <thead>
       <tr>
+        <th scope="col"></th>
         <th scope="col">#</th>
         <th scope="col">ID</th>
         <th scope="col">Name</th>
@@ -24,6 +36,13 @@
     <tbody>
       @for (user of UsersList; track $index) {
       <tr>
+        <th scope="row">
+          <mat-checkbox
+            (change)="onSelctedProducts($event, user)"
+            class="example-margin"
+            [checked]="user.checked"
+          ></mat-checkbox>
+        </th>
         <th scope="row">{{ $index + 1 }}</th>
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
@@ -40,7 +59,7 @@
         <td>
           <button
             type="button"
-            (click)="onUpdateUser(user)"
+            (click)="onEditUser(user)"
             class="btn btn-success"
           >
             Update
