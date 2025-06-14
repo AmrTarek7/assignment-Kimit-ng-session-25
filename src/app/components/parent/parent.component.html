@@ -1,0 +1,21 @@
+<p>parent works!</p>
+
+<div class="mb-5 d-flex align-items-center ms-4">
+  <button class="h-75 btn btn-danger" (click)="decrimentCounter()">
+    Decrement -
+  </button>
+  <app-child [counter]="counter" (resetConunter)="onResetCounter($event)" />
+  <button class="h-75 btn btn-success" (click)="incrimentCounter()">
+    Increment +
+  </button>
+</div>
+
+<div class="d-flex align-items-center ms-5">
+  <button class="h-75 btn btn-danger" (click)="decrimentSignalCounter()">
+    Decrement -
+  </button>
+  <app-signal class="mx-4" />
+  <button class="h-75 btn btn-success" (click)="incrimentSignalCounter()">
+    Increment +
+  </button>
+</div>
